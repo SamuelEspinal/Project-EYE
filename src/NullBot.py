@@ -1,6 +1,8 @@
 # bot.py
 import os
 
+from datetime import datetime
+
 import discord
 from dotenv import load_dotenv
 from discord.ext import commands
@@ -8,19 +10,30 @@ from discord.ext import commands
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 
-client = discord.Client(intents=discord.Intents.all())
+intents = discord.Intents.default()
+intents.message_content = True
 
-@client.event
+bot = commands.Bot(command_prefix='null ', intents=intents)
+
+@bot.event
 async def on_ready():
-    print(f'{client.user} has connected to Discord!')
+    print(f'{bot.user} has connected to Discord!')
 
-@client.event
+@bot.event
 async def on_message(message):
-    if message.author == client.user:
+    if message.author == bot.user:
         return
 
     if message.content.lower() == 'hi nullbot' or message.content.lower() == 'hey nullbot' or message.content.lower() == 'hello nullbot':
         response = 'Hey'
         await message.channel.send(response)
 
-client.run(TOKEN)
+    await bot.process_commands(message)
+
+@bot.command()
+async def say(ctx, *args):
+    if len(args) != 0:
+        reply = ' '.join(args)
+        await ctx.send(reply)
+
+bot.run(TOKEN)
