@@ -41,3 +41,7 @@ Contributions to Project EYE are welcome! If you have any ideas, bug fixes, or e
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Training Data
+The AI for this discord bot was trained utiliting the following:
+J. Schler, M. Koppel, S. Argamon and J. Pennebaker (2006). Effects of Age and Gender on Blogging in Proceedings of 2006 AAAI Spring Symposium on Computational Approaches for Analyzing Weblogs.
