@@ -2,6 +2,9 @@ import torch
 import torch.nn as nn
 from torch.nn import functional as F
 
+import os
+import sys
+
 def torchGenerate():
     # hyperparameters
     batch_size = 32 # how many independent sequences will we process in parallel?
@@ -16,7 +19,7 @@ def torchGenerate():
 #    torch.manual_seed(1337)
 
     # wget https://raw.githubusercontent.com/karpathy/char-rnn/master/data/tinyshakespeare/input.txt
-    with open(r'C:\Users\Darren Yu\OneDrive\Documents\VS Code\NullBot\Project-EYE\src\trainingText.txt', 'r', encoding='utf-8') as file:
+    with open(os.path.join(sys.path[0], "trainingText.txt"), 'r', encoding='utf-8') as file:
             trainingText = file.read()
 
     # here are all the unique characters that occur in this text
