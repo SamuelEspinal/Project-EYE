@@ -1,6 +1,8 @@
 # bot.py
 import os
 
+import bigram
+
 from datetime import datetime
 
 import discord
@@ -35,5 +37,19 @@ async def say(ctx, *args):
     if len(args) != 0:
         reply = ' '.join(args)
         await ctx.send(reply)
+
+@bot.command()
+async def remind(ctx, *args):
+    if len(args) > 1:
+        reminder = ' '.join(args[1:])
+        await ctx.send("I'll remind you to " + reminder + " on " + args[0])
+    else:
+        await ctx.send("I need more info")
+
+@bot.command()
+async def generate(ctx):
+    response = bigram.torchGenerate()
+    if response:
+        await ctx.send(response)
 
 bot.run(TOKEN)
