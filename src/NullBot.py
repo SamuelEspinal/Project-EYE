@@ -2,6 +2,7 @@
 import os
 
 import bigram
+import bigramModel2
 
 from datetime import datetime
 
@@ -47,8 +48,14 @@ async def remind(ctx, *args):
         await ctx.send("I need more info")
 
 @bot.command()
-async def generate(ctx):
+async def generate1(ctx):
     response = bigram.torchGenerate()
+    if response:
+        await ctx.send(response)
+
+@bot.command()
+async def generate2(ctx):
+    response = bigramModel2.torchGenerate()
     if response:
         await ctx.send(response)
 
