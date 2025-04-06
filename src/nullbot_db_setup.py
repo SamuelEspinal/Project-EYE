@@ -1,14 +1,15 @@
 # nullbot_db_setup.py
+import os
 from dotenv import load_dotenv
 
-# Importing module 
+# Importing module
 import mysql.connector
 
 # Creating connection object
 mydb = mysql.connector.connect(
-    host = "localhost",
-    user = "nullbot",
-    password = "nullbotSQL2025!"
+    host = os.getenv('DB_HOST'),
+    user = os.getenv('DB_USER'),
+    password = os.getenv('DB_PASSWORD')
 )
 
 # Cursor to execute statements
