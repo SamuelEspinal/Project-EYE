@@ -1,8 +1,8 @@
 # bot.py
 import os
 
-import bigram
-import bigramModel2
+# import bigram
+# import bigramModel2
 
 from datetime import datetime
 
@@ -17,6 +17,19 @@ intents = discord.Intents.default()
 intents.message_content = True
 
 bot = commands.Bot(command_prefix='null ', intents=intents)
+
+# Importing module 
+import mysql.connector
+
+# Creating connection object
+mydb = mysql.connector.connect(
+    host = "localhost",
+    user = "nullbot",
+    password = "nullbotSQL2025!"
+)
+
+# Printing the connection object 
+print(mydb)
 
 @bot.event
 async def on_ready():
@@ -45,7 +58,8 @@ async def remind(ctx, *args):
         reminder = ' '.join(args[1:])
         await ctx.send("I'll remind you to " + reminder + " on " + args[0])
     else:
-        await ctx.send("I need more info")
+        await ctx.send("*null remind [date] [time (optional)] [reminder]*\n\n" +
+                       "Usage: Nullbot will ping you at the specified date and time with the reminder message.")
 
 @bot.command()
 async def generate1(ctx):
