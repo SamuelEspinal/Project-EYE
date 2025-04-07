@@ -28,7 +28,7 @@ def create_greeting(message):
     elif(current_hour >= 16 and current_hour < 20):
         greeting = f"Good evening {message.author.name}"
     
-    print(message.author.id)
+    #print(message.author.id)
 
     return greeting
 

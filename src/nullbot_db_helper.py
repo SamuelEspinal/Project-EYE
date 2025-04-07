@@ -132,11 +132,12 @@ class Reminder:
         self.context = context
 
 # returns a list of all reminders
-def get_all_reminders():
+def get_all_reminders(channel_id):
     reminder_list = []
 
     try:
-        cursor.execute("SELECT * FROM reminders;")
+        cursor.execute("SELECT * FROM reminders JOIN context on reminders.context_id = context.context_id "
+                       "WHERE context.channel_id = " + str(channel_id) + ";")
         result_list = cursor.fetchall()
         if(result_list is not None):
             for result in result_list:
