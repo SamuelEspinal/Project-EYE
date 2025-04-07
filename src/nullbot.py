@@ -55,7 +55,7 @@ async def showreminders(ctx):
     await reminder_helper.showReminders(ctx)
 
 @bot.command()
-async def checkreminders(ctx, bot):
+async def checkreminders(ctx):
     await reminder_helper.checkReminders(ctx, bot)
 
 #### DEBUG COMMANDS ####

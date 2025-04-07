@@ -45,7 +45,7 @@ async def remind(ctx, *args):
                 await ctx.send("Failed to create users row for Discord ID " + str(ctx.author.id))
     else:
         await ctx.send(usage)
-        
+
 async def showReminders(ctx):
     """
     Show all reminders for the user in the current channel.
@@ -70,10 +70,11 @@ async def checkReminders(ctx, bot):
             guild = bot.get_guild(reminder.context.guild_id)
             channel = guild.get_channel(reminder.context.channel_id)
             if(reminder.reminder_date < now):
-                await channel.send("<@" + str(reminder.context.user.discord_id) + ">, reminder to \"" + reminder.reminder_text) + "\""
+                await channel.send(f"<@{reminder.context.user.discord_id}>, reminder to \"{reminder.reminder_text}\"")
                 delete_reminder(reminder.reminder_id)
                 delete_context(reminder.context.context_id)
             else:
-                await channel.send("I will remind " + str(reminder.context.user.user_name) + " to \"" + reminder.reminder_text + "\" on " + str(reminder.reminder_date))
+                #await channel.send("I will remind " + str(reminder.context.user.user_name) + " to \"" + reminder.reminder_text + "\" on " + str(reminder.reminder_date))
+                await channel.send("I will remind " + f"<@{reminder.context.user.user_name}> to \"{reminder.reminder_text}\" on \" {reminder.reminder_date}\"") 
     else:
         await ctx.send("There are no pending reminders")
