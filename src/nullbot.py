@@ -24,6 +24,7 @@ intents = discord.Intents.default()
 intents.message_content = True
 bot = commands.Bot(command_prefix='null ', intents=intents)
 
+#### BOT EVENTS ####
 @bot.event
 async def on_ready():
     print(f'{bot.user} has connected to Discord!')
@@ -38,12 +39,6 @@ async def on_message(message):
         await message.channel.send(response)
 
     await bot.process_commands(message)
-
-@bot.command()
-async def say(ctx, *args):
-    if len(args) != 0:
-        reply = ' '.join(args)
-        await ctx.send(reply)
 
 #### REMINDER COMMANDS ####
 @bot.command()
@@ -62,6 +57,12 @@ async def checkreminders(ctx):
 @bot.command()
 async def saysomething(ctx):
     await bot.get_guild(ctx.guild.id).get_channel(ctx.channel.id).send("successful")
+
+@bot.command()
+async def say(ctx, *args):
+    if len(args) != 0:
+        reply = ' '.join(args)
+        await ctx.send(reply)
 
 
 # @bot.command()
