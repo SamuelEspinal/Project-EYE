@@ -17,6 +17,7 @@ from db.nullbot_db_helper import *
 #Import command helper functions
 import helpers.reminder.reminder_helper as reminder_helper
 import helpers.weather.weather_helper as weather_helper
+import helpers.games.nulldle.nulldle_helper as nulldle_helper
 
 #Bot initialization
 load_dotenv()
@@ -59,6 +60,33 @@ async def checkreminders(ctx):
 async def weather(ctx, *, location="Orlando"): #default location is Orlando
     await weather_helper.weather(ctx, location)
 
+#### GAME COMMANDS ####
+"""Nulldle commands"""
+@bot.command()
+async def playnulldle(ctx):
+    await nulldle_helper.start_nulldle(ctx)
+
+@bot.command()
+async def guess(ctx, word: str):
+    await nulldle_helper.make_nulldle_guess(ctx, word)
+
+@bot.group()
+async def nulldle(ctx):
+    if ctx.invoked_subcommand is None:
+        await nulldle_helper.nulldle_help(ctx)
+
+@nulldle.command()
+async def leaderboard(ctx, sort_by: str = "wins"):
+    await nulldle_helper.show_nulldle_leaderboard(ctx, sort_by)
+
+@nulldle.command()
+async def daily(ctx):
+    await nulldle_helper.daily_nulldle(ctx)
+
+@nulldle.command()
+async def stats(ctx):
+    await nulldle_helper.nulldle_stats(ctx)
+
 #### DEBUG COMMANDS ####
 @bot.command()
 async def saysomething(ctx):
@@ -70,6 +98,22 @@ async def say(ctx, *args):
         reply = ' '.join(args)
         await ctx.send(reply)
 
+@bot.command()
+async def giveroll(ctx):
+    role = discord.utils.get(ctx.guild.roles, name="Word Wizard")
+    if role:
+        await ctx.author.add_roles(role)
+        await ctx.send("✅ Role added!")
+    else:
+        await ctx.send("❌ Role not found.")
+
+@bot.command()
+async def test_roll_streak(ctx):
+    from helpers.games.nulldle.nulldle_helper import user_stats
+    user_id = ctx.author.id
+    stats = user_stats[user_id]
+    stats["streak"] = 5  # or 10 or 15
+    await nulldle_helper.make_nulldle_guess(ctx, "dummy")  # This will fail word check but simulate role logic
 
 # @bot.command()
 # async def createme(ctx):
