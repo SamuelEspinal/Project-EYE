@@ -63,12 +63,12 @@ def group_forecasts_by_day(forecasts):
 """
 def summarize_day(entries):
     # Extract all temperature readings for the day into a list
-    temps = [e['main']['temp'] for e in entries]
+    temps_c = [e['main']['temp'] for e in entries]
+
+    temps_f = [(c * 9/5) + 32 for c in temps_c]
     # Extract all weather descriptions (like 'light rain', 'clear sky') for the day
     descriptions = [e['weather'][0]['description'].title() for e in entries]
 
-    high = max(temps)
-    low = min(temps)
     # Find the most frequently occurring weather description
     # e.g., if there are multiple 'Clear Sky' entries, it will be picked
     most_common_desc = Counter(descriptions).most_common(1)[0][0]
@@ -76,13 +76,13 @@ def summarize_day(entries):
 
     return {
         "desc": f"{emoji} {most_common_desc}",
-        "high": round(high, 1),
-        "low": round(low, 1)
+        "high": round(max(temps_f), 1),
+        "low": round(min(temps_f), 1)
     }
 
 #### Main weather function using free 5-day forecast API ####
 async def weather(ctx, location):
-    print(f"Received location: {location}")
+    print(f"WEATHER COMMAND - Received location: {location}")
     # Step 1: Get geolocation data
     geocode_url = f"http://api.openweathermap.org/geo/1.0/direct?q={location}&limit=1&appid={OWM_API_KEY}"
     geo_response = requests.get(geocode_url).json()
@@ -113,7 +113,7 @@ async def weather(ctx, location):
         date_str = date.strftime("%A, %b %d")
         embed.add_field(
             name=date_str,
-            value=f"{summary['desc']}\n🌡️ High: {summary['high']}°C / Low: {summary['low']}°C",
+            value=f"{summary['desc']}\n🌡️ High: {summary['high']}°F / Low: {summary['low']}°F",
             inline=False
         )
 

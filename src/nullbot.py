@@ -57,7 +57,6 @@ async def checkreminders(ctx):
 #### WEATHER COMMANDS ####
 @bot.command()
 async def weather(ctx, *, location="Orlando"): #default location is Orlando
-    print(f"Received location: {location}")
     await weather_helper.weather(ctx, location)
 
 #### DEBUG COMMANDS ####
