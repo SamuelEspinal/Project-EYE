@@ -1,6 +1,6 @@
 # nullbot_helper.py
 from datetime import datetime
-from nullbot_db_helper import *
+from db.nullbot_db_helper import *
 
 greeting_list = ["hi", "hey", "hello", "whats up", "what's up", "sup", "yo", "hows it going", "how's it going", "greetings"]
 

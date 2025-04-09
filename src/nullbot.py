@@ -11,11 +11,12 @@ from datetime import datetime
 # import bigramModel2
 
 #Import tool functions
-from nullbot_helper import *
-from nullbot_db_helper import *
+from helpers.nullbot_helper import *
+from db.nullbot_db_helper import *
 
 #Import command helper functions
-import nullbot_reminder_helper as reminder_helper
+import helpers.reminder.reminder_helper as reminder_helper
+import helpers.weather.weather_helper as weather_helper
 
 #Bot initialization
 load_dotenv()
@@ -52,6 +53,12 @@ async def showreminders(ctx):
 @bot.command()
 async def checkreminders(ctx):
     await reminder_helper.checkReminders(ctx, bot)
+
+#### WEATHER COMMANDS ####
+@bot.command()
+async def weather(ctx, *, location="Orlando"): #default location is Orlando
+    print(f"Received location: {location}")
+    await weather_helper.weather(ctx, location)
 
 #### DEBUG COMMANDS ####
 @bot.command()

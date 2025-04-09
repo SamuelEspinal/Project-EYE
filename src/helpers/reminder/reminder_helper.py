@@ -1,5 +1,5 @@
-from nullbot_helper import *
-from nullbot_db_helper import *
+from helpers.nullbot_helper import *
+from db.nullbot_db_helper import *
 
 async def remind(ctx, *args):
     """
