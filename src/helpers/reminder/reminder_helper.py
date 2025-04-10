@@ -62,7 +62,7 @@ async def checkReminders(ctx, bot):
                 delete_reminder(reminder.reminder_id)
                 delete_context(reminder.context.context_id)
             else:
-                await ctx.send("I will remind " + f"<@{reminder.context.user.discord_id}> to \"{reminder.reminder_text}\" on {reminder.reminder_date}")
+                await ctx.send("I will remind " + f"{reminder.context.user.user_name} to \"{reminder.reminder_text}\" on {reminder.reminder_date}")
     else:
         await ctx.send("There are no pending reminders")
 
