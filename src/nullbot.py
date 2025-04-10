@@ -1,7 +1,5 @@
 # nullbot.py
 import os
-import time
-import threading
 import asyncio
 import discord
 from dotenv import load_dotenv
@@ -30,6 +28,7 @@ bot = commands.Bot(command_prefix='null ', intents=intents)
 @bot.event
 async def on_ready():
     print(f'{bot.user} has connected to Discord!')
+    await reminder_helper.reminderChecker(bot)
 
 @bot.event
 async def on_message(message):
@@ -142,11 +141,3 @@ async def test_roll_streak(ctx):
 #         await ctx.send(response)
 
 bot.run(TOKEN)
-
-# def reminder_timer():
-#     while True:
-#         time.sleep(5)
-#         try:
-#             asyncio.run(check_reminders())
-#         except Exception as e:
-#             print(e)

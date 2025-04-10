@@ -1,3 +1,5 @@
+import asyncio
+
 from helpers.nullbot_helper import *
 from db.nullbot_db_helper import *
 
@@ -46,35 +48,38 @@ async def remind(ctx, *args):
     else:
         await ctx.send(usage)
 
-async def showReminders(ctx):
-    """
-    Show all reminders for the user in the current channel.
-    """
-    reminder_list = get_all_reminders()
-    index = 1
-    bot_response = ""
-    for reminder in reminder_list:
-        bot_response += str(index) + ". Remind " + reminder.context.user.user_name + " to \"" + reminder.reminder_text + "\" on " + str(reminder.reminder_date) + "\n"
-        index += 1
-    await ctx.send(bot_response)
-
 async def checkReminders(ctx, bot):
     """
-    Check all reminders for the user in the current channel.
+    Check all reminders for the user in the current server.
     """
-    reminder_list = get_all_reminders(ctx.channel.id)
+    reminder_list = get_user_reminders(ctx.guild.id, ctx.author.id)
     now = datetime.now()
 
     if(reminder_list is not None and len(reminder_list) > 0):
         for reminder in reminder_list:
-            guild = bot.get_guild(reminder.context.guild_id)
-            channel = guild.get_channel(reminder.context.channel_id)
             if(reminder.reminder_date < now):
-                await channel.send(f"<@{reminder.context.user.discord_id}>, reminder to \"{reminder.reminder_text}\"")
+                await ctx.send(f"<@{reminder.context.user.discord_id}>, reminder to \"{reminder.reminder_text}\"")
                 delete_reminder(reminder.reminder_id)
                 delete_context(reminder.context.context_id)
             else:
-                #await channel.send("I will remind " + str(reminder.context.user.user_name) + " to \"" + reminder.reminder_text + "\" on " + str(reminder.reminder_date))
-                await channel.send("I will remind " + f"<@{reminder.context.user.user_name}> to \"{reminder.reminder_text}\" on \" {reminder.reminder_date}\"") 
+                await ctx.send("I will remind " + f"<@{reminder.context.user.discord_id}> to \"{reminder.reminder_text}\" on {reminder.reminder_date}")
     else:
         await ctx.send("There are no pending reminders")
+
+async def reminderChecker(bot):
+    """
+    Automatically looping task to check reminders every minute
+    """
+    while True:
+        await asyncio.sleep(60)
+        reminder_list = get_all_reminders()
+        now = datetime.now()
+
+        if(reminder_list is not None and len(reminder_list) > 0):
+            for reminder in reminder_list:
+                guild = bot.get_guild(reminder.context.guild_id)
+                channel = guild.get_channel(reminder.context.channel_id)
+                if(reminder.reminder_date < now):
+                    await channel.send(f"<@{reminder.context.user.discord_id}>, reminder to \"{reminder.reminder_text}\"")
+                    delete_reminder(reminder.reminder_id)
+                    delete_context(reminder.context.context_id)

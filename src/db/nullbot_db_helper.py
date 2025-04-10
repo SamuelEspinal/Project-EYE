@@ -131,13 +131,35 @@ class Reminder:
         self.reminder_date = reminder_date
         self.context = context
 
-# returns a list of all reminders
-def get_all_reminders(channel_id):
+# returns a list of all reminders in nullbot
+def get_all_reminders():
     reminder_list = []
 
     try:
-        cursor.execute("SELECT * FROM reminders JOIN context on reminders.context_id = context.context_id "
-                       "WHERE context.channel_id = " + str(channel_id) + ";")
+        cursor.execute("SELECT * FROM reminders;")
+        result_list = cursor.fetchall()
+        if(result_list is not None):
+            for result in result_list:
+                reminder_id = result[0]
+                reminder_text = result[1]
+                reminder_date = result[2]
+                context = get_context(result[3])
+                reminder_list.append(Reminder(reminder_id, reminder_text, reminder_date, context))
+    except Exception as e:
+        print(e)
+    
+    return reminder_list
+
+# returns a list of all reminders for the user in the current server
+def get_user_reminders(guild_id, discord_id):
+    reminder_list = []
+
+    try:
+        cursor.execute("SELECT * FROM reminders "
+                       "JOIN context on reminders.context_id = context.context_id "
+                       "JOIN users on context.user_id = users.user_id "
+                       "WHERE context.guild_id = " + str(guild_id) + " "
+                       "AND users.discord_id = " + str(discord_id) + ";")
         result_list = cursor.fetchall()
         if(result_list is not None):
             for result in result_list:
